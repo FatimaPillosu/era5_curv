@@ -70,17 +70,17 @@ for season in season_list:
         sen_slope = round(result.slope, 3)
         intercept = result.intercept
         trend_vals = sen_slope * np.arange( (year_f - year_s) + 1 ) + intercept
-        label_vals = f"slope = {sen_slope}\n(p-value = {pvalue})"
+        label_vals = f"slope: {sen_slope}\n(p-value: {pvalue})"
 
         result = mk.original_test(running_mean_centered)
         pvalue = round(result.p, 3)
         sen_slope = round(result.slope, 3)
         intercept = result.intercept
         trend_rm = sen_slope * np.arange( (year_f - year_s) + 1 ) + intercept
-        label_rm = f"slope = {sen_slope}\n(p-value = {pvalue})"
+        label_rm = f"slope: {sen_slope}\n(p-value: {pvalue})"
 
         # Plotting the timeseries and the trend
-        plt.figure(figsize=(4, 2.3))
+        plt.figure(figsize=(3, 2.3))
         plt.plot(year_list, curv_av, lw=0.3, color = "royalblue")
         plt.plot(year_list, running_mean_centered, lw=0.3, color = "orangered")
         plt.plot(year_list, trend_vals, "--", lw=1.5, color = "royalblue", label = label_vals)
@@ -89,11 +89,9 @@ for season in season_list:
         plt.plot([1935, 2030], [0,0], lw = 0.5, color = "dimgray")
         plt.xlim([1935, 2030])
         plt.ylim([-3, 6.1])
-        plt.xticks(fontsize=6)
-        plt.yticks(fontsize=6)
-        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.18), ncol=2, frameon=False, fontsize=6)
-        plt.show()
-        exit()
+        plt.xticks(fontsize=8)
+        plt.yticks(fontsize=8)
+        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.19), ncol=2, frameon=False, fontsize=7)
         
         # Saving the curv climatology plot
         dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"
