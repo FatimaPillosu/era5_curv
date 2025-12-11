@@ -80,7 +80,7 @@ for season in season_list:
         label_rm = f"slope: {sen_slope}\n(p-value: {pvalue})"
 
         # Plotting the timeseries and the trend
-        plt.figure(figsize=(2.8, 2))
+        plt.figure(figsize=(2.5, 1.5))
         plt.plot(year_list, curv_av, lw=0.3, color = "royalblue")
         plt.plot(year_list, running_mean_centered, lw=0.3, color = "orangered")
         plt.plot(year_list, trend_vals, "--", lw=1, color = "royalblue", label = label_vals)
@@ -91,7 +91,7 @@ for season in season_list:
         plt.ylim([-3, 6.1])
         plt.xticks(fontsize=6)
         plt.yticks(fontsize=6)
-        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.19), ncol=2, frameon=False, fontsize=6)
+        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.25), ncol=2, frameon=False, fontsize=6)
         
         # Saving the curv climatology plot
         dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"
