@@ -83,15 +83,15 @@ for season in season_list:
         plt.figure(figsize=(2.8, 2))
         plt.plot(year_list, curv_av, lw=0.3, color = "royalblue")
         plt.plot(year_list, running_mean_centered, lw=0.3, color = "orangered")
-        plt.plot(year_list, trend_vals, "--", lw=1.5, color = "royalblue", label = label_vals)
-        plt.plot(year_list, trend_rm, "--", lw=1.5, color = "orangered", label = label_rm)
-        plt.plot([1935, 2030], [curv_climate_pt, curv_climate_pt], linestyle = "dashdot", color = "green", lw = 2)
+        plt.plot(year_list, trend_vals, "--", lw=1, color = "royalblue", label = label_vals)
+        plt.plot(year_list, trend_rm, "--", lw=1, color = "orangered", label = label_rm)
+        plt.plot([1935, 2030], [curv_climate_pt, curv_climate_pt], linestyle = "dashdot", color = "green", lw = 1)
         plt.plot([1935, 2030], [0,0], lw = 0.5, color = "dimgray")
         plt.xlim([1935, 2030])
         plt.ylim([-3, 6.1])
-        plt.xticks(fontsize=7)
-        plt.yticks(fontsize=7)
-        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.19), ncol=2, frameon=False, fontsize=7)
+        plt.xticks(fontsize=6)
+        plt.yticks(fontsize=6)
+        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.19), ncol=2, frameon=False, fontsize=6)
         
         # Saving the curv climatology plot
         dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"
