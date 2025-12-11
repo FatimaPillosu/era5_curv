@@ -1,0 +1,6 @@
+45,8,PYTHON,01_plot_freq_features_varying_radius.py
+398,8,PYTHON,02_plot_curv_timeseries_pt.py
+693,8,PYTHON,03_compute_stationarity_curv_fields.py
+1007,8,PYTHON,04_plot_stationarity_curv_timeseries_pt.py
+1301,8,PYTHON,05_compute_stationarity_curv_trend_stats_global.py
+1639,8,PYTHON,06_plot_stationarity_curv_trend_stats_global.py

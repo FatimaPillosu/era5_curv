@@ -1,0 +1,3 @@
+The curvature diagnostic was computed by Nigel Roberts.
+Original data is found here:
+/perm/ecm0559/ERA5_curv/fatima
