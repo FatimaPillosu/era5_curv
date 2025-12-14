@@ -16,7 +16,7 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 ############################################################################
 # DESCRIPTION CODE
 # 11_plot_trend_pt.py plots the trend for the curv diagnostic, for a specific grid-points.
-#Runtime: negligible.
+#Runtime: ~ 1 minute.
 
 # DESCRIPTION INPUT PARAMETERS
 # year_s (integer, format YYYY): start year to consider.
@@ -30,10 +30,10 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # dir_out (string): relative path of the directory containing the trend plots.
 
 # INPUT PARAMETERS
-year_s = 1950
+year_s = 1979
 year_f = 2024
 season_list = ["DJF", "MAM", "JJA", "SON"]
-radius_list = [1000]
+radius_list = [500, 1000, 2000, 3000]
 coord_pt = [39.47, -0.37]
 name_pt = "Valencia_Spain"
 running_mean_frame = 5
@@ -57,12 +57,8 @@ for season in season_list:
         curv_av = []
         year_list = np.arange(year_s, year_f + 1)
         for year in year_list:
-            print(f"Year: {year} - Curv radius: {radius}")
+            print(f"Season: {season} - Curv radius: {radius} - Year: {year}")
             curv_av.append( mv.nearest_gridpoint( mv.read(f"{dir_in}/{radius}/av_curv_{year}_{season}.grib"), coord_pt ) )
-
-        # Computing the running mean    
-        series = pd.Series(curv_av, index=year_list)
-        running_mean_centered = series.rolling(window=running_mean_frame, center=True).mean()
 
         # Computing the trend
         result = mk.original_test(curv_av)
@@ -70,31 +66,27 @@ for season in season_list:
         sen_slope = round(result.slope, 3)
         intercept = result.intercept
         trend_vals = sen_slope * np.arange( (year_f - year_s) + 1 ) + intercept
-        label_vals = f"slope: {sen_slope}\n(p-value: {pvalue})"
+        label_vals = f"slope: {sen_slope} (p-value: {pvalue})"
 
-        result = mk.original_test(running_mean_centered)
-        pvalue = round(result.p, 3)
-        sen_slope = round(result.slope, 3)
-        intercept = result.intercept
-        trend_rm = sen_slope * np.arange( (year_f - year_s) + 1 ) + intercept
-        label_rm = f"slope: {sen_slope}\n(p-value: {pvalue})"
+        # Computing the running mean    
+        series = pd.Series(curv_av, index=year_list)
+        running_mean_centered = series.rolling(window=running_mean_frame, center=True).mean()
 
         # Plotting the timeseries and the trend
         plt.figure(figsize=(2.5, 1.5))
-        plt.plot(year_list, curv_av, lw=0.3, color = "royalblue")
-        plt.plot(year_list, running_mean_centered, lw=0.3, color = "orangered")
+        plt.plot(year_list, curv_av, lw=0.5, color = "royalblue")
+        plt.plot(year_list, running_mean_centered, lw=0.5, color = "orangered")
         plt.plot(year_list, trend_vals, "--", lw=1, color = "royalblue", label = label_vals)
-        plt.plot(year_list, trend_rm, "--", lw=1, color = "orangered", label = label_rm)
-        plt.plot([1935, 2030], [curv_climate_pt, curv_climate_pt], linestyle = "dashdot", color = "green", lw = 1)
+        plt.plot([1935, 2030], [curv_climate_pt, curv_climate_pt], color = "fuchsia", lw = 0.5)
         plt.plot([1935, 2030], [0,0], lw = 0.5, color = "dimgray")
         plt.xlim([1935, 2030])
-        plt.ylim([-3, 6.1])
+        plt.ylim([-4, 6.1])
         plt.xticks(fontsize=6)
         plt.yticks(fontsize=6)
-        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.25), ncol=2, frameon=False, fontsize=6)
+        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), frameon=False, fontsize=6)
         
         # Saving the curv climatology plot
         dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"
         os.makedirs(dir_out_temp, exist_ok=True)
-        plt.savefig(f"{dir_out_temp}/curv_av_climate_{season}_{radius}m.png", dpi=1000, bbox_inches='tight')
+        plt.savefig(f"{dir_out_temp}/trend_{season}_{radius}m.png", dpi=1000, bbox_inches='tight')
         plt.close()
