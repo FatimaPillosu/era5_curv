@@ -30,7 +30,7 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # dir_out (string): relative path of the directory containing the trend plots.
 
 # INPUT PARAMETERS
-year_s = 1940
+year_s = 1979
 year_f = 2024
 season_list = ["DJF", "MAM", "JJA", "SON"]
 radius_list = [500, 1000, 2000, 3000]
@@ -103,4 +103,3 @@ for season in season_list:
         os.makedirs(dir_out_temp, exist_ok=True)
         plt.savefig(f"{dir_out_temp}/trend_{season}_{radius}m.png", dpi=1000, bbox_inches='tight')
         plt.close()
-        exit()
