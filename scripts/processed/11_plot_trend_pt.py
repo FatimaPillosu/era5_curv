@@ -30,7 +30,7 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # dir_out (string): relative path of the directory containing the trend plots.
 
 # INPUT PARAMETERS
-year_s = 1979
+year_s = 1940
 year_f = 2024
 season_list = ["DJF", "MAM", "JJA", "SON"]
 radius_list = [500, 1000, 2000, 3000]
@@ -77,16 +77,30 @@ for season in season_list:
         plt.plot(year_list, curv_av, lw=0.5, color = "royalblue")
         plt.plot(year_list, running_mean_centered, lw=0.5, color = "orangered")
         plt.plot(year_list, trend_vals, "--", lw=1, color = "royalblue", label = label_vals)
-        plt.plot([1935, 2030], [curv_climate_pt, curv_climate_pt], color = "fuchsia", lw = 0.5)
-        plt.plot([1935, 2030], [0,0], lw = 0.5, color = "dimgray")
-        plt.xlim([1935, 2030])
-        plt.ylim([-4, 6.1])
-        plt.xticks(fontsize=6)
-        plt.yticks(fontsize=6)
-        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), frameon=False, fontsize=6)
+        plt.plot([1939, 2026], [curv_climate_pt, curv_climate_pt], color = "fuchsia", lw = 0.5)
+        plt.plot([1939, 2026], [0,0], lw = 0.5, color = "dimgray")
+        plt.xlim([1939, 2026])
+        plt.ylim([-4.1, 6.1])
+        
+        decades_ticks = np.arange(1940, 2030, 10)
+        year_ticks = np.arange(1940, 2025+1, 5)
+        plt.gca().set_xticks(decades_ticks)
+        plt.gca().set_xticks(year_ticks, minor=True)
+        plt.gca().tick_params(axis='x', which='major', labelsize=5)
+        plt.gca().tick_params(axis='x', which='minor', length=2)
+
+        curv_major_ticks = np.arange(-4, 6+1, 2)
+        curv_minor_ticks = np.arange(-4, 6+1, 1)
+        plt.gca().set_yticks(curv_major_ticks)
+        plt.gca().set_yticks(curv_minor_ticks, minor=True)
+        plt.gca().tick_params(axis='y', which='major', labelsize=5)
+        plt.gca().tick_params(axis='y', which='minor', length=2)
+
+        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.12), frameon=False, fontsize=5)
         
         # Saving the curv climatology plot
         dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"
         os.makedirs(dir_out_temp, exist_ok=True)
         plt.savefig(f"{dir_out_temp}/trend_{season}_{radius}m.png", dpi=1000, bbox_inches='tight')
         plt.close()
+        exit()
