@@ -1,0 +1,7 @@
+30,13,FOLDER,01_freq_features_varying_radius
+307,13,FOLDER,02_curv_timeseries_pt
+515,13,FOLDER,04_stationarity_curv_timeseries_pt
+747,13,FOLDER,06_stationarity_curv_trend_stats_global
+1021,13,FOLDER,10_plot_average_climate_curv
+1322,13,FOLDER,11_trend_pt
+1556,13,FOLDER,13_trend_global
