@@ -30,12 +30,14 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # dir_out (string): relative path of the directory containing the trend plots.
 
 # INPUT PARAMETERS
-year_s = 1979
+year_s = 1950
 year_f = 2024
-season_list = ["DJF", "MAM", "JJA", "SON"]
-radius_list = [500, 1000, 2000, 3000]
-coord_pt = [38.027, 23.57]
-name_pt = "Athenes"
+season_list = ["SON"]
+radius_list = [2000]
+# season_list = ["DJF", "MAM", "JJA", "SON"]
+# radius_list = [500, 1000, 2000, 3000]
+coord_pt = [75, -30]
+name_pt = "Test"
 # coord_pt = [50.43, 7.23]
 # name_pt = "Ahrweiler "
 # coord_pt = [37.75, -25.67]
@@ -81,7 +83,8 @@ for season in season_list:
         running_mean_centered = series.rolling(window=running_mean_frame, center=True).mean()
 
         # Plotting the timeseries and the trend
-        plt.figure(figsize=(2.5, 1.5))
+        plt.figure(figsize=(10, 8))
+        #plt.figure(figsize=(2.5, 1.5))
         plt.plot(year_list, curv_av, lw=0.5, color = "royalblue")
         plt.plot(year_list, running_mean_centered, lw=0.5, color = "orangered")
         plt.plot(year_list, trend_vals, "--", lw=1, color = "royalblue", label = label_vals)
@@ -105,6 +108,9 @@ for season in season_list:
         plt.gca().tick_params(axis='y', which='minor', length=2)
 
         plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.12), frameon=False, fontsize=5)
+
+        plt.show()
+        exit()
         
         # Saving the curv climatology plot
         dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"

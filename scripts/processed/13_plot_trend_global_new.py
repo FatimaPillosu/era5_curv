@@ -30,11 +30,11 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 year_s = 1950
 year_f = 2024
 radius_list = [2000]
-season_list = ["SON"]
+season_list = ["JJA"]
 # radius_list = [500, 1000, 2000, 3000]
 # season_list = ["DJF", "MAM", "JJA", "SON"]
 dir_in = os.path.join(DATA_COMPUTE_DIR, "12_trend_global")
-dir_out = os.path.join(DATA_PLOTS_DIR, "13_trend_global")
+dir_out = os.path.join(DATA_PLOTS_DIR, "13_trend_global_new")
 ############################################################################
 
 
@@ -47,15 +47,24 @@ for radius in radius_list:
         print(f"Plotting the trend statistics for {season} and curv radius = {radius}m")
 
         # Reading the trend statistics
+        sen_slope = mv.read(f"{dir_in}/{year_s}_{year_f}/sen_slope_{season}_{radius}m.grib")
         curv_vals = mv.read(f"{dir_in}/{year_s}_{year_f}/curv_vals_{season}_{radius}m.grib")
         pvalue = mv.read(f"{dir_in}/{year_s}_{year_f}/pvalue_{season}_{radius}m.grib")
-        sen_slope = mv.read(f"{dir_in}/{year_s}_{year_f}/sen_slope_{season}_{radius}m.grib")
 
-        # Defining the cases to plot
-        mask_cyclonic_upward = (curv_vals > 0.01) & (sen_slope > 0.005) 
-        mask_cyclonic_downward = (curv_vals > 0.01) & (sen_slope < -0.005)
-        mask_acyclonic_upward = (curv_vals < -0.01) & (sen_slope > 0.005) 
-        mask_acyclonic_downward = (curv_vals < -0.01) & (sen_slope < -0.005)
+        # Processing the p-value data for display
+        pvalue = mv.regrid(
+            grid = [2.5,2.5],
+            interpolation = "nearest_neighbour",
+            data = pvalue
+            )
+
+        pvalue = (pvalue <= 0.05)
+        pvalue_geo = mv.create_geo(
+            type = 'xyv',
+            latitudes = mv.latitudes(pvalue),
+               longitudes = mv.longitudes(pvalue),
+               values = mv.values(pvalue)
+               )
 
         # Plotting the trend stats
         coastlines = mv.mcoast(
@@ -84,79 +93,62 @@ for radius in radius_list:
             legend_box_blanking = "on",
             legend_entry_text_width = 50
             )
-        
-        contouring_cyclonic_upward = mv.mcont(
-            legend = "on",
-            contour = "off",
-            contour_level_selection_type = "level_list",
-            contour_level_list = [0.9, 1.1],
-            contour_label = "off",
-            contour_shade = "on",
-            contour_shade_colour_method = "list",
-            contour_shade_technique     = "grid_shading",
-            contour_shade_colour_list = ["rgb(0.28,0.8415,0.776)"]
-            )
             
-        contouring_cyclonic_downward = mv.mcont(
+        contouring_slope = mv.mcont(
             legend = "on",
             contour = "off",
             contour_level_selection_type = "level_list",
-            contour_level_list = [0.9, 1.1],
+            contour_level_list = [-0.1, -0.02, -0.01, -0.001, 0.001, 0.01, 0.02, 0.1],
             contour_label = "off",
             contour_shade = "on",
             contour_shade_colour_method = "list",
             contour_shade_technique     = "grid_shading",
-            contour_shade_colour_list = ["rgb(0.7825,0.9429,0.9242)"]
+            contour_shade_colour_list = ["rgb(0.5929,0.4744,0.2541)", "rgb(0.851,0.7176,0.4667)", "rgb(0.947,0.8716,0.7314)", "white", "rgb(0.6079,0.9137,0.878)", "rgb(0.1098,0.7216,0.651)", "rgb(0.2338,0.5506,0.5136)"]
             )
         
-        contouring_acyclonic_upward = mv.mcont(
+        contouring_curv = mv.mcont(
             legend = "on",
-            contour = "off",
-            contour_level_selection_type = "level_list",
-            contour_level_list = [0.9, 1.1],
             contour_label = "off",
-            contour_shade = "on",
-            contour_shade_colour_method = "list",
-            contour_shade_technique     = "grid_shading",
-            contour_shade_colour_list = ["rgb(0.9478,0.3698,0.6588)"]
-            )
-            
-        contouring_acyclonic_downward = mv.mcont(
-            legend = "on",
-            contour = "off",
             contour_level_selection_type = "level_list",
-            contour_level_list = [0.9, 1.1],
-            contour_label = "off",
-            contour_shade = "on",
-            contour_shade_colour_method = "list",
-            contour_shade_technique     = "grid_shading",
-            contour_shade_colour_list = ["rgb(0.947,0.7236,0.8353)"]
+            contour_level_list = [-6,-3,0,3,6],
+            contour_line_colour_rainbow = "on",
+            contour_line_colour_rainbow_method = "list",
+            contour_line_colour_rainbow_colour_list = ["rgb(0.6129,0.03026,0.3216)", "rgb(1,0,0.498)", "black", "rgb(0.2825,0.3724,0.9567)", "rgb(0.03148,0.1162,0.6666)"],
+            contour_line_thickness_rainbow_list = [8,8,10,8,8]
             )
         
-        contouring_pvalue_005 = mv.mcont(
+        contouring_curv = mv.mcont(
             legend = "on",
-            contour = "on",
-            contour_line_colour = "blue",
-            contour_line_thickness = 8,
-            contour_line_style = "solid",
             contour_label = "off",
-            contour_highlight = "off",
-            contour_max_level = 0.05,
-            contour_min_level = 0.05,
-            contour_level_count = 1
-        )
+            contour_level_selection_type = "level_list",
+            contour_level_list = [-3,0,3],
+            contour_line_colour_rainbow = "on",
+            contour_line_colour_rainbow_method = "list",
+            contour_line_colour_rainbow_colour_list = ["rgb(1,0,0.498)", "black", "rgb(0,0,1)"],
+            contour_line_thickness_rainbow_list = [10,10,10]
+            )
+        
+        symbol_pvalue = mv.msymb(
+            legend = "on",
+            symbol_type = "marker",
+            symbol_table_mode = "on",
+            symbol_min_table = [0.9],
+            symbol_max_table = [1.1],
+            symbol_marker_table = [4],
+            symbol_colour_table = ["rgb(0,0,0)"],
+            symbol_height_table = [ 0.2]
+            )
 
         # Save the trend statistics as grib files
-        # dir_out_temp = f"{dir_out}/{year_s}_{year_f}"
-        # os.makedirs(dir_out_temp, exist_ok=True)
-        # file_out_slope = f"{dir_out_temp}/trend_{season}_{radius}m"
-        # png_slope = mv.png_output(output_width = 3000, output_name = file_out_slope)
-        # mv.setoutput(png_slope)
-        mv.plot(mask_cyclonic_upward, contouring_cyclonic_upward, 
-                mask_cyclonic_downward, contouring_cyclonic_downward,
-                mask_acyclonic_upward, contouring_acyclonic_upward, 
-                mask_acyclonic_downward, contouring_acyclonic_downward,
-                pvalue, contouring_pvalue_005,
-                coastlines, legend
-                )
+        dir_out_temp = f"{dir_out}/{year_s}_{year_f}"
+        os.makedirs(dir_out_temp, exist_ok=True)
+        file_out_slope = f"{dir_out_temp}/trend_{season}_{radius}m"
+        png_slope = mv.png_output(output_width = 3000, output_name = file_out_slope)
+        mv.setoutput(png_slope)
+        mv.plot(
+            sen_slope, contouring_slope,
+            pvalue_geo, symbol_pvalue,
+            curv_vals, contouring_curv,
+            coastlines, legend
+            )
         exit()
