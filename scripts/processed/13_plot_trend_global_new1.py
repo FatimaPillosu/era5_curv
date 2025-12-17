@@ -32,7 +32,7 @@ year_f = 2024
 radius_list = [500, 1000, 2000, 3000]
 season_list = ["DJF", "MAM", "JJA", "SON"]
 dir_in = os.path.join(DATA_COMPUTE_DIR, "12_trend_global")
-dir_out = os.path.join(DATA_PLOTS_DIR, "13_trend_global_new")
+dir_out = os.path.join(DATA_PLOTS_DIR, "13_trend_global_new1")
 ############################################################################
 
 
@@ -49,20 +49,8 @@ for radius in radius_list:
         curv_vals = mv.read(f"{dir_in}/{year_s}_{year_f}/curv_vals_{season}_{radius}m.grib")
         pvalue = mv.read(f"{dir_in}/{year_s}_{year_f}/pvalue_{season}_{radius}m.grib")
 
-        # Processing the p-value data for display
-        pvalue = mv.regrid(
-            grid = [2.5,2.5],
-            interpolation = "nearest_neighbour",
-            data = pvalue
-            )
-
-        pvalue = (pvalue <= 0.05)
-        pvalue_geo = mv.create_geo(
-            type = 'xyv',
-            latitudes = mv.latitudes(pvalue),
-               longitudes = mv.longitudes(pvalue),
-               values = mv.values(pvalue)
-               )
+        # Selecting slope values where p-value <= 0.05
+        significant_slope = sen_slope * (pvalue <= 0.05)
 
         # Plotting the trend stats
         coastlines = mv.mcoast(
@@ -125,17 +113,6 @@ for radius in radius_list:
             contour_line_colour_rainbow_colour_list = ["rgb(1,0,0.498)", "black", "rgb(0,0,1)"],
             contour_line_thickness_rainbow_list = [10,10,10]
             )
-        
-        symbol_pvalue = mv.msymb(
-            legend = "on",
-            symbol_type = "marker",
-            symbol_table_mode = "on",
-            symbol_min_table = [0.9],
-            symbol_max_table = [1.1],
-            symbol_marker_table = [4],
-            symbol_colour_table = ["rgb(0,0,0)"],
-            symbol_height_table = [ 0.2]
-            )
 
         # Save the trend statistics as grib files
         dir_out_temp = f"{dir_out}/{year_s}_{year_f}"
@@ -144,8 +121,7 @@ for radius in radius_list:
         png_slope = mv.png_output(output_width = 3000, output_name = file_out_slope)
         mv.setoutput(png_slope)
         mv.plot(
-            sen_slope, contouring_slope,
-            pvalue_geo, symbol_pvalue,
+            significant_slope, contouring_slope,
             curv_vals, contouring_curv,
             coastlines, legend
             )
