@@ -13,3 +13,9 @@
 95,248,PYTHON,13_plot_trend_global.py
 403,248,PYTHON,13_plot_trend_global_new.py
 721,248,PYTHON,13_plot_trend_global_new1.py
+323,409,MCOAST,Coastlines
+-100,-100,FOLDER,Coastlines#
+445,371,MCONT,Contouring
+-100,-100,FOLDER,Contouring#
+90,392,GEOVIEW,Geographical View
+-100,-100,FOLDER,Geographical View#
