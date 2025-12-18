@@ -32,8 +32,7 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # INPUT PARAMETERS
 year_s = 1950
 year_f = 2024
-season_list = ["DJF"]
-# season_list = ["DJF", "MAM", "JJA", "SON"]
+season_list = ["DJF", "MAM", "JJA", "SON"]
 radius_list = [500, 1000, 2000, 3000]
 coord_pt = [39.47, -0.37]
 name_pt = "Valencia_Spain"
@@ -43,14 +42,12 @@ dir_out = os.path.join(DATA_PLOTS_DIR, "04_trend_pt")
 
 
 # Plotting the average CURV, against climatology, for a specific season
+plt.figure(figsize=(10, 8))
 for season in season_list:
 
     # Plotting the average CURV, against climatology, for a specific radius
+    sen_slope = []
     for radius in radius_list:
-
-        # Reading the CURV climatology
-        curv_climate = mv.read(f"{dir_in_climate_curv}/{radius}/curv_climate_{season}.grib")
-        curv_climate_pt = mv.nearest_gridpoint(curv_climate, coord_pt)
 
         # Reading the average CURV for the analysis period
         curv_av = []
@@ -61,48 +58,17 @@ for season in season_list:
 
         # Computing the trend
         result = mk.original_test(curv_av)
-        pvalue = round(result.p, 3)
-        sen_slope = round(result.slope, 3)
-        intercept = result.intercept
-        trend_vals = sen_slope * np.arange( (year_f - year_s) + 1 ) + intercept
-        label_vals = f"slope: {sen_slope} (p-value: {pvalue})"
+        sen_slope.append(round(result.slope, 3))
 
-        # Computing the running mean    
-        series = pd.Series(curv_av, index=year_list)
-        running_mean_centered = series.rolling(window=running_mean_frame, center=True).mean()
+    # Plotting the timeseries and the trend
+    plt.plot(radius_list, sen_slope, lw=1, color = "royalblue", label = season)
 
-        # Plotting the timeseries and the trend
-        plt.figure(figsize=(10, 8))
-        #plt.figure(figsize=(2.5, 1.5))
-        plt.plot(year_list, curv_av, lw=0.5, color = "royalblue")
-        plt.plot(year_list, running_mean_centered, lw=0.5, color = "orangered")
-        plt.plot(year_list, trend_vals, "--", lw=1, color = "royalblue", label = label_vals)
-        plt.plot([1939, 2026], [curv_climate_pt, curv_climate_pt], color = "fuchsia", lw = 0.5)
-        plt.plot([1939, 2026], [0,0], lw = 0.5, color = "dimgray")
-        plt.xlim([1939, 2026])
-        plt.ylim([-4.1, 6.1])
-        
-        decades_ticks = np.arange(1940, 2030, 10)
-        year_ticks = np.arange(1940, 2025+1, 5)
-        plt.gca().set_xticks(decades_ticks)
-        plt.gca().set_xticks(year_ticks, minor=True)
-        plt.gca().tick_params(axis='x', which='major', labelsize=5)
-        plt.gca().tick_params(axis='x', which='minor', length=2)
+plt.legend()
+plt.show()
+exit()
 
-        curv_major_ticks = np.arange(-4, 6+1, 2)
-        curv_minor_ticks = np.arange(-4, 6+1, 1)
-        plt.gca().set_yticks(curv_major_ticks)
-        plt.gca().set_yticks(curv_minor_ticks, minor=True)
-        plt.gca().tick_params(axis='y', which='major', labelsize=5)
-        plt.gca().tick_params(axis='y', which='minor', length=2)
-
-        plt.legend(loc="upper center", bbox_to_anchor=(0.5, 1.12), frameon=False, fontsize=5)
-
-        plt.show()
-        exit()
-        
-        # Saving the curv climatology plot
-        dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"
-        os.makedirs(dir_out_temp, exist_ok=True)
-        plt.savefig(f"{dir_out_temp}/trend_{season}_{radius}m.png", dpi=1000, bbox_inches='tight')
-        plt.close()
+# Saving the curv climatology plot
+dir_out_temp = f"{dir_out}/{name_pt}/{year_s}_{year_f}"
+os.makedirs(dir_out_temp, exist_ok=True)
+plt.savefig(f"{dir_out_temp}/trend_{season}_{radius}m.png", dpi=1000, bbox_inches='tight')
+plt.close()
