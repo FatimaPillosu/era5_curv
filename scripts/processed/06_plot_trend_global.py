@@ -4,10 +4,7 @@ if utils_dir not in sys.path:
     sys.path.append(utils_dir)
 import os
 import numpy as np
-import pandas as pd
-import pymannkendall as mk
 import metview as mv
-import matplotlib.pyplot as plt
 from utils.paths import DATA_COMPUTE_DIR, DATA_PLOTS_DIR
 
 np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful for debugging)
