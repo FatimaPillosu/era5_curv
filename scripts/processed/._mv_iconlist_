@@ -7,15 +7,8 @@
 60,128,PYTHON,07_compute_correlation_curv_tp.py
 400,128,PYTHON,08_compute_average_curv.py
 725,128,PYTHON,09_compute_climate_curv.py
-67,188,PYTHON,10_plot_average_climate_curv.py
 430,188,PYTHON,11_plot_trend_pt.py
 726,188,PYTHON,12_compute_trend_global.py
 95,248,PYTHON,13_plot_trend_global.py
 403,248,PYTHON,13_plot_trend_global_new.py
 721,248,PYTHON,13_plot_trend_global_new1.py
-323,409,MCOAST,Coastlines
--100,-100,FOLDER,Coastlines#
-445,371,MCONT,Contouring
--100,-100,FOLDER,Contouring#
-90,392,GEOVIEW,Geographical View
--100,-100,FOLDER,Geographical View#
