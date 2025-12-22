@@ -6,5 +6,5 @@
 308,68,PYTHON,06_plot_trend_global.py
 555,68,PYTHON,07_plot_trends_radius.py
 782,68,PYTHON,08_plot_summary_trend_map.py
-361,196,MCONT,Contouring
--100,-100,FOLDER,Contouring#
+9,128,PYTHON,09_compute_number_days_curv_vals.py
+299,128,PYTHON,10_plot_trend_vals_curv.py
