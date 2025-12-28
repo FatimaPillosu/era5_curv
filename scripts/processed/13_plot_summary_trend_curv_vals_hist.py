@@ -16,7 +16,7 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # DESCRIPTION CODE
 # 13_plot_summary_trend_curv_vals_hist.py plots a histogram about the trend statistics 
 # of CURV values for different categories.
-#Runtime: ~ 1 minute.
+#Runtime: ~2 minutes.
 
 # DESCRIPTION INPUT PARAMETERS
 # year_s (integer, format YYYY): start year to consider.
@@ -29,8 +29,8 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # INPUT PARAMETERS
 year_s = 1950
 year_f = 2024
-season_list = ["JJA", "MAM", "JJA", "SON"]
-radius_list = [2000]
+season_list = ["DJF", "MAM", "JJA", "SON"]
+radius_list = [500, 1000, 2000, 3000]
 dir_in = os.path.join(DATA_COMPUTE_DIR, "11_trend_vals_curv_global")
 dir_out = os.path.join(DATA_PLOTS_DIR, "13_summary_trend_curv_vals_hist")
 ############################################################################
@@ -54,9 +54,22 @@ for season in season_list:
             # Reading the trend statistics
             slope = mv.read(f"{dir_in}/{year_s}_{year_f}/{radius}m/{season}/sen_slope_{thr_curv_low}_{thr_curv_up}.grib")
             pvalue = mv.read(f"{dir_in}/{year_s}_{year_f}/{radius}m/{season}/pvalue_{thr_curv_low}_{thr_curv_up}.grib")
-            significant_slope = slope * (pvalue <= 0.05)
+            significant_slope = mv.values(slope * (pvalue <= 0.05))
+            
+            # Separating the upward trends from the downwards trends
+            up_ind = np.where(significant_slope > 0.0005)[0]
+            up_perc = significant_slope[up_ind].shape[0] / significant_slope.shape[0] * 100
+            down_ind = np.where(significant_slope < -0.0005)[0]
+            down_perc = significant_slope[down_ind].shape[0] / significant_slope.shape[0] * 100
+            trend = [down_perc, up_perc]
 
             # Plotting summary histogram
+            plt.figure(figsize=(4, 4))
+            plt.bar([-0.25, 0.25], trend, width = 0.5, color=[(1,0.498,0), (0,0.498,1)])
+            plt.ylim([0,25])
             
-
-        exit()            
+            # Saving the curv climatology plot
+            dir_out_temp = f"{dir_out}/{year_s}_{year_f}/{radius}/{season}"
+            os.makedirs(dir_out_temp, exist_ok=True)
+            plt.savefig(f"{dir_out_temp}/trend_{thr_curv_low}_{thr_curv_up}.png", dpi=1000, bbox_inches='tight')
+            plt.close()

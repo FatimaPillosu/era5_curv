@@ -75,7 +75,7 @@ for ind_season, season in enumerate(season_list):
     plt.xlim([x[0], x[-1]])
     plt.ylim([-0.12, 0.1])
     
-    # # Saving the curv climatology plot
+    # Saving the curv climatology plot
     dir_out_temp = f"{dir_out}/{year_s}_{year_f}"
     os.makedirs(dir_out_temp, exist_ok=True)
     plt.savefig(f"{dir_out_temp}/trend_stats_{season}.png", dpi=1000, bbox_inches='tight')
