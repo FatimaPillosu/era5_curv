@@ -15,7 +15,7 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # DESCRIPTION CODE
 # 09_compute_number_days_curv_vals.py computes the number of days, per year, in which 
 # curv exceeds certain values.
-#Runtime: ~ 12 hours.
+#Runtime: ~ 18 hours.
 
 # DESCRIPTION INPUT PARAMETERS
 # year_s (integer, format YYYY): start year to consider.

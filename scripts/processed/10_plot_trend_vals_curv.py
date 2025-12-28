@@ -30,12 +30,12 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # dir_out (string): relative path of the directory containing the trend plots.
 
 # INPUT PARAMETERS
-year_s = 1940
-year_f = 1945
+year_s = 1950
+year_f = 2024
 radius_list = [3000]
-season_list = ["DJF", "MAM", "JJA", "SON"]
+season_list = ["MAM", "MAM", "JJA", "SON"]
 coord_pt = [50.43, 7.23]
-name_pt = "Ahrweiler "
+name_pt = "Ahrweiler"
 dir_in = os.path.join(DATA_COMPUTE_DIR, "09_number_days_curv_vals")
 dir_out = os.path.join(DATA_PLOTS_DIR, "10_plot_trend_vals_curv")
 ############################################################################

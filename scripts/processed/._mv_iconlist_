@@ -8,3 +8,5 @@
 782,68,PYTHON,08_plot_summary_trend_map.py
 9,128,PYTHON,09_compute_number_days_curv_vals.py
 299,128,PYTHON,10_plot_trend_vals_curv.py
+512,128,PYTHON,11_compute_trend_vals_curv_global.py
+9,188,PYTHON,12_plot_summary_trend_curv_vals_map.py
