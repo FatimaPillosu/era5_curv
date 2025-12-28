@@ -10,3 +10,6 @@
 299,128,PYTHON,10_plot_trend_vals_curv.py
 512,128,PYTHON,11_compute_trend_vals_curv_global.py
 9,188,PYTHON,12_plot_summary_trend_curv_vals_map.py
+277,188,PYTHON,13_plot_summary_trend_curv_vals_hist.py
+298,413,MCONT,Contouring
+-100,-100,FOLDER,Contouring#

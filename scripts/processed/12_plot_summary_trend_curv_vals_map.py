@@ -15,7 +15,7 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # DESCRIPTION CODE
 # 12_plot_summary_trend_curv_vals_map.py plots a summary map about the trend statistics 
 # of CURV values for different categories.
-#Runtime: ~ 1 minute.
+#Runtime: ~ 5 minutes.
 
 # DESCRIPTION INPUT PARAMETERS
 # year_s (integer, format YYYY): start year to consider.
@@ -30,8 +30,8 @@ np.set_printoptions(threshold=sys.maxsize) # to print full numpy arrays (useful 
 # INPUT PARAMETERS
 year_s = 1950
 year_f = 2024
-season_list = ["JJA", "MAM", "JJA", "SON"]
-radius_list = [2000]
+season_list = ["DJF", "MAM", "JJA", "SON"]
+radius_list = [500, 1000, 2000, 3000]
 dir_in = os.path.join(DATA_COMPUTE_DIR, "11_trend_vals_curv_global")
 dir_out = os.path.join(DATA_PLOTS_DIR, "12_summary_trend_curv_vals_map")
 ############################################################################
@@ -99,18 +99,17 @@ for season in season_list:
                 contour_shade = "on",
                 contour_shade_colour_method = "list",
                 contour_shade_method = "area_fill",
-                contour_shade_colour_list = ["rgb(0.851,0.7176,0.4667)", "white", "rgb(0.6157,0.4078,0.9412)"]
+                contour_shade_colour_list = ["rgb(1,0.498,0)", "white", "rgb(0,0.498,1)"]
                 )
                 
             # Save the trend statistics as grib files
-            # dir_out_temp = f"{dir_out}/{year_s}_{year_f}"
-            # os.makedirs(dir_out_temp, exist_ok=True)
-            # file_out_slope = f"{dir_out_temp}/trend_{season}"
-            # png_slope = mv.png_output(output_width = 3000, output_name = file_out_slope)
-            # mv.setoutput(png_slope)
+            dir_out_temp = f"{dir_out}/{year_s}_{year_f}/{radius}/{season}"
+            os.makedirs(dir_out_temp, exist_ok=True)
+            file_out_slope = f"{dir_out_temp}/trend_{thr_curv_low}_{thr_curv_up}"
+            png_slope = mv.png_output(output_width = 3000, output_name = file_out_slope)
+            mv.setoutput(png_slope)
             mv.plot(
                 significant_slope, contouring_slope,
                 geo_view, 
                 legend
-                )
-        exit()            
+                )         
